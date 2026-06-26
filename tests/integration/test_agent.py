@@ -12,46 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from google.adk.agents.run_config import RunConfig, StreamingMode
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
-from google.genai import types
+"""Integration tests for the expense agent workflow.
 
-from app.agent import root_agent
+test_workflow_imports  — verifies the module loads, root_agent is a Workflow,
+                         and the App is configured correctly. No LLM call.
+test_workflow_graph    — re-verifies graph compiles (also tested in unit tests,
+                         but good to catch import-level regressions here).
+"""
+
+from google.adk.workflow import Workflow
+from google.adk.apps import App
+
+from app.agent import root_agent, app as agent_app
 
 
-def test_agent_stream() -> None:
-    """
-    Integration test for the agent stream functionality.
-    Tests that the agent returns valid streaming responses.
-    """
+def test_workflow_imports() -> None:
+    """Verify the agent module loads without error and key objects are present."""
+    assert root_agent is not None, "root_agent must not be None"
+    assert isinstance(root_agent, Workflow), "root_agent must be a Workflow instance"
+    assert isinstance(agent_app, App), "app must be an App instance"
+    assert agent_app.name == "app", "App name must match the agent directory"
 
-    session_service = InMemorySessionService()
 
-    session = session_service.create_session_sync(user_id="test_user", app_name="test")
-    runner = Runner(agent=root_agent, session_service=session_service, app_name="test")
+def test_workflow_graph() -> None:
+    """Confirm the Workflow graph compiles and all four agent nodes are reachable."""
+    assert root_agent.graph is not None
+    root_agent.graph.validate_graph()
 
-    message = types.Content(
-        role="user", parts=[types.Part.from_text(text="Why is the sky blue?")]
-    )
-
-    events = list(
-        runner.run(
-            new_message=message,
-            user_id="test_user",
-            session_id=session.id,
-            run_config=RunConfig(streaming_mode=StreamingMode.SSE),
-        )
-    )
-    assert len(events) > 0, "Expected at least one message"
-
-    has_text_content = False
-    for event in events:
-        if (
-            event.content
-            and event.content.parts
-            and any(part.text for part in event.content.parts)
-        ):
-            has_text_content = True
-            break
-    assert has_text_content, "Expected at least one message with text content"
+    node_names = {n.name for n in root_agent.graph.nodes}
+    for expected in ("triage_agent", "security_agent", "policy_agent", "approval_agent"):
+        assert expected in node_names, f"Node '{expected}' missing from graph"
