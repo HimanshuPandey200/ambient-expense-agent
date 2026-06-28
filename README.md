@@ -229,7 +229,7 @@ uv tool install google-agents-cli
 Clone the repository:
 
 ```bash
-git clone YOUR_PUBLIC_GITHUB_REPOSITORY_URL
+git clone https://github.com/HimanshuPandey200/ambient-expense-agent.git
 cd ambient-expense-agent
 ```
 
@@ -396,24 +396,17 @@ The application includes:
 
 ## Screenshots
 
-Add the three successful demonstration screenshots to a folder such as:
+### Approved Expense
 
-```text
-docs/images/
-├── approved-expense.png
-├── human-review-expense.png
-└── blocked-expense.png
-```
-
-Then display them here:
-
-```markdown
 ![Approved expense](docs/images/approved-expense.png)
+
+### Human Review
 
 ![Human review expense](docs/images/human-review-expense.png)
 
+### Security Block
+
 ![Blocked expense](docs/images/blocked-expense.png)
-```
 
 ## Demo Video
 
@@ -466,4 +459,4 @@ This project is a demonstration system. Real organizations should configure expe
 
 ## License
 
-Add the appropriate open-source license before public distribution.
+This project is currently shared for educational and portfolio purposes as part of the Kaggle AI Agents Capstone.
