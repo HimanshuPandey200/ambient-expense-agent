@@ -43,6 +43,8 @@ The project can help organizations:
 
 ## Multi-Agent Architecture
 
+![Ambient Expense Approval Agent Architecture](docs/images/architecture-overview.png)
+
 ```text
 Employee Expense Request
           |
