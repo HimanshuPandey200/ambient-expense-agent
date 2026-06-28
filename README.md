@@ -414,9 +414,7 @@ The application includes:
 
 YouTube demonstration:
 
-```text
-ADD_YOUR_YOUTUBE_VIDEO_LINK
-```
+[Watch the Ambient Expense Approval Agent Demo](https://youtu.be/zXuQE77lR1k)
 
 The video demonstrates:
 
